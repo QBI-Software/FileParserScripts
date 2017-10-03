@@ -56,6 +56,9 @@ def main(inputdir, outputfile, colname):
         try:
             files = glob.glob(join(inputdir, seriespattern))
             print("Files:", len(files))
+
+            cols = ['Brain', 'Filename', 'Count_ColocalizedPARV_DAPI_Objects', 'Count_ColocalizedGAD_DAPI_Objects',
+                    'Count_ColocalizedGAD_and_PARVObjects']
             for f2 in files:
                 print(f2)                # eg Brain09_Image.csv
                 data = pandas.read_csv(f2)
@@ -68,7 +71,7 @@ def main(inputdir, outputfile, colname):
                         brain = basename(f2).split('_')[0]
                         data['Brain'] = data.apply(lambda x: brain, axis=1)
                         #Add new columns to original data
-                        cols = ['Brain','Filename'] + data.columns.tolist()
+                        #cols = ['Brain','Filename'] + data.columns.tolist()
                         data = data.reindex_axis(cols, axis=1)
                         data.to_csv(f2, index=False)  # resave over original
 
@@ -83,8 +86,8 @@ def main(inputdir, outputfile, colname):
 
             try:
                 #Filter data on these columns only
-                cols = ['Brain', 'Filename', 'Count_ColocalizedPARV_DAPI_Objects', 'Count_ColocalizedGAD_DAPI_Objects',
-                        'Count_ColocalizedGAD_and_PARVObjects', 'Count_ColocalizedGADandPARVwithDapiRegion']
+                #cols = ['Brain', 'Filename', 'Count_ColocalizedPARV_DAPI_Objects', 'Count_ColocalizedGAD_DAPI_Objects',
+                #        'Count_ColocalizedGAD_and_PARVObjects']
                 summarydata = summarydata.reindex_axis(cols, axis=1)
 
                 #Sort via ending to tabs if Excel or separate files if CSV
