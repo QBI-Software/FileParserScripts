@@ -103,7 +103,7 @@ def main(inputdir, outputfile, colname):
                     for ending in endings:
                         sdata = summarydata[summarydata.Filename.str.endswith(ending + '.tif')]
                         sdata.to_excel(writer, index=False,sheet_name=ending)
-
+                    writer.close()
                 print("Completed: ", ctr, "files compiled to: ", outputfile)
 
             except Exception as e:
@@ -122,7 +122,7 @@ if __name__ == "__main__":
              ''')
     parser.add_argument('--filedir', action='store', help='Directory containing files', default=".")
     parser.add_argument('--output', action='store', help='Output file name with full path', default="SummaryImageData.xls")
-    parser.add_argument('--column', action='store', help='Column name with full path', default="URL_Dapi")
+    parser.add_argument('--column', action='store', help='Column name', default="URL_Dapi")
 
     args = parser.parse_args()
     print("*" * 80, "\nRunning Compile CSV\n", "*" * 80)
