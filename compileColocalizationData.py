@@ -66,14 +66,19 @@ def main(inputdir, outputfile, colname):
                 if (not data.empty):
                     if 'Filename' not in data.columns and 'Brain' not in data.columns:
                         # Create filename column as first column
+                        origcols = data.columns.tolist()
                         data['Filename'] = data.apply(lambda x: extractFilename(x, colname), axis=1)
                         # Add Brain num column
                         brain = basename(f2).split('_')[0]
                         data['Brain'] = data.apply(lambda x: brain, axis=1)
                         #Add new columns to original data
-                        #cols = ['Brain','Filename'] + data.columns.tolist()
+                        cols1 = ['Brain','Filename'] + origcols
+                        data1 = data
+                        data1 = data1.reindex_axis(cols1, axis=1)
+                        copyf = f2.replace(".csv","_copy.csv")
+                        data1.to_csv(copyf, index=False)  # save copy with extra columns
                         data = data.reindex_axis(cols, axis=1)
-                        data.to_csv(f2, index=False)  # resave over original
+
 
                     # Save to compiledfile
                     if summarydata.empty or len(data.columns) == len(summarydata.columns):
@@ -125,7 +130,7 @@ if __name__ == "__main__":
              ''')
     parser.add_argument('--filedir', action='store', help='Directory containing files', default=".")
     parser.add_argument('--output', action='store', help='Output file name with full path', default="SummaryImageData.xls")
-    parser.add_argument('--column', action='store', help='Column name', default="URL_Dapi")
+    parser.add_argument('--column', action='store', help='Column name', default="FileName_Dapi")
 
     args = parser.parse_args()
     print("*" * 80, "\nRunning Compile CSV\n", "*" * 80)
