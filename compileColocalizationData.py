@@ -16,8 +16,8 @@ Created on Sep 27 2017
 
 import argparse
 import glob
-from os import R_OK, access
-from os.path import join, basename, isabs, splitext
+from os import R_OK, access, mkdir
+from os.path import join, basename, isabs, splitext, dirname
 
 import pandas
 
@@ -59,6 +59,15 @@ def main(inputdir, outputfile, colname):
 
             cols = ['Brain', 'Filename', 'Count_ColocalizedPARV_DAPI_Objects', 'Count_ColocalizedGAD_DAPI_Objects',
                     'Count_ColocalizedGAD_and_PARVObjects']
+            outputdir = dirname(outputfile)
+            if inputdir == outputdir:
+                #add subdir for output files
+                try:
+                    mkdir(join(outputdir, 'sorted'))
+                    outputdir = join(outputdir, 'sorted')
+                except:
+                    pass
+
             for f2 in files:
                 print(f2)                # eg Brain09_Image.csv
                 data = pandas.read_csv(f2)
@@ -75,7 +84,7 @@ def main(inputdir, outputfile, colname):
                         cols1 = ['Brain','Filename'] + origcols
                         data1 = data
                         data1 = data1.reindex_axis(cols1, axis=1)
-                        copyf = f2.replace(".csv","_copy.csv")
+                        copyf = join(outputdir, basename(f2))
                         data1.to_csv(copyf, index=False)  # save copy with extra columns
                         data = data.reindex_axis(cols, axis=1)
 
@@ -126,7 +135,7 @@ def main(inputdir, outputfile, colname):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='Compile Image CSV Files',
                                      description='''\
-            Reads a directory and extracts data into an output file
+            Reads a directory, moves Filename column to beginning and extracts data into an output file.  Output files will be copied to sorted directory.
              ''')
     parser.add_argument('--filedir', action='store', help='Directory containing files', default=".")
     parser.add_argument('--output', action='store', help='Output file name with full path', default="SummaryImageData.xls")
