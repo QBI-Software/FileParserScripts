@@ -141,6 +141,7 @@ if __name__ == "__main__":
     parser.add_argument('--output', action='store', help='Output file name with full path', default="SummaryImageData.xls")
     parser.add_argument('--column', action='store', help='Column name', default="FileName_Dapi")
 
+
     args = parser.parse_args()
     print("*" * 80, "\nRunning Compile CSV\n", "*" * 80)
     print("\nInput: \t", args.filedir, "\nOutput: \t", args.output, "\nColumn: \t", args.column, "\n")
