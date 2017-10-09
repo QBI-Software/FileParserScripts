@@ -57,7 +57,7 @@ def main(inputdir, outputfile, colname):
             files = glob.glob(join(inputdir, seriespattern))
             print("Files:", len(files))
 
-            cols = ['Brain', 'Filename', 'Count_ColocalizedPARV_DAPI_Objects', 'Count_ColocalizedGAD_DAPI_Objects',
+            cols = ['Brain', 'Filename', 'Count_DapiPositivecells','Count_ColocalizedPARV_DAPI_Objects', 'Count_ColocalizedGAD_DAPI_Objects',
                     'Count_ColocalizedGAD_and_PARVObjects']
             outputdir = dirname(outputfile)
             if inputdir == outputdir:
